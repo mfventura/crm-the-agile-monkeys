@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "users")
@@ -19,4 +20,6 @@ public class UserEntity {
   private Integer id;
   private String email;
   private String role;
+  @Column(name = "remove_date")
+  private LocalDateTime removeDate;
 }

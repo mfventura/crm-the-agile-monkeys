@@ -18,7 +18,9 @@ import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.SecurityFilterChain;
 
+import java.util.HashMap;
 import java.util.LinkedHashSet;
+import java.util.Map;
 import java.util.Set;
 
 @EnableWebSecurity
@@ -32,10 +34,11 @@ public class AuthorizationConfiguration {
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
     http
             .authorizeHttpRequests((authz) -> authz
-                    .antMatchers("/api/v1/test/get").hasAnyRole("ADMIN", "TEST")
-                    .antMatchers("/api/v1/test/get2").hasAnyRole("ADMIN", "TEST2")
+                .antMatchers("/api/v1/users").hasAnyRole("ADMIN")
+                .antMatchers("/api/v1/customers").hasAnyRole("ADMIN", "USER")
                 .anyRequest().authenticated()
             )
+            .headers().frameOptions().disable().and()
             .csrf().disable()
             .formLogin().disable()
             .oauth2Login(
@@ -45,22 +48,22 @@ public class AuthorizationConfiguration {
             );
     return http.build();
   }
-  
   private OAuth2UserService<OAuth2UserRequest, OAuth2User> oauth2UserService() {
 		final OAuth2UserService userService = new DefaultOAuth2UserService();
     return (u -> {
       OAuth2User user = userService.loadUser(u);
       Set<GrantedAuthority> authorities = new LinkedHashSet<>();
       final String email = (String) user.getAttributes().get("email");
-      final var userEntity = userRepository.findByEmail(email);
+      final var userEntity = userRepository.findByEmailAndRemoveDateIsNull(email);
+      Map<String, Object> attributes = new HashMap<>();
       if(userEntity.isPresent()){
-        user.getAttributes().put("id", userEntity.get().getId());
+        attributes.put("id", userEntity.get().getId());
+        attributes.put("email", email);
         authorities.add(new SimpleGrantedAuthority("ROLE_"+userEntity.get().getRole()));
       }
-      return new DefaultOAuth2User(authorities, user.getAttributes(), u.getClientRegistration().getProviderDetails().getUserInfoEndpoint().getUserNameAttributeName());
+      return new DefaultOAuth2User(authorities, attributes, u.getClientRegistration().getProviderDetails().getUserInfoEndpoint().getUserNameAttributeName());
     });
   }
-  
   @Bean
   public WebSecurityCustomizer webSecurityCustomizer() {
     return (web) -> web.ignoring().antMatchers("/h2-console**");

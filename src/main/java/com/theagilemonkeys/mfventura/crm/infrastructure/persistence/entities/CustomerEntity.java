@@ -23,5 +23,6 @@ public class CustomerEntity {
   private String surname2;
   private String country;
   private String document;
+  @Column(length = 1000000000)
   private String image64;
 }
