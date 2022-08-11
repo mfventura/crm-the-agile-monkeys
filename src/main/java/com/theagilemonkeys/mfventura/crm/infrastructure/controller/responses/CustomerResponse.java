@@ -9,6 +9,7 @@ import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import java.util.List;
 
 @AllArgsConstructor
 @Data
@@ -21,4 +22,7 @@ public class CustomerResponse {
   private String surname2;
   private String country;
   private String document;
+  private String imageURL;
+  private String image64;
+  private List<ChangeHistoryResponse> history;
 }

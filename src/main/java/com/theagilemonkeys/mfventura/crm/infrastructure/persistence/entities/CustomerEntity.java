@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "customers")
@@ -25,4 +27,9 @@ public class CustomerEntity {
   private String document;
   @Column(length = 1000000000)
   private String image64;
+  @Column(name = "remove_date")
+  private LocalDateTime removeDate;
+  @OneToMany
+  @JoinColumn(name = "customer_id", referencedColumnName = "id")
+  private List<ChangeHistoryEntity> history;
 }

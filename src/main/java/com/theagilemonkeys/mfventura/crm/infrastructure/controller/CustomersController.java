@@ -2,6 +2,7 @@ package com.theagilemonkeys.mfventura.crm.infrastructure.controller;
 
 import com.theagilemonkeys.mfventura.crm.domain.services.CustomersService;
 import com.theagilemonkeys.mfventura.crm.infrastructure.controller.requests.CreateCustomerRequest;
+import com.theagilemonkeys.mfventura.crm.infrastructure.controller.requests.UpdateCustomerRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpHeaders;
@@ -29,28 +30,58 @@ public class CustomersController extends ErrorHandler {
   }
 
   @PostMapping()
-  public ResponseEntity createCustomer(@RequestBody CreateCustomerRequest request, Authentication auth) throws UnsupportedEncodingException {
-    //TODO validar datos
+  public ResponseEntity createCustomer(@RequestBody CreateCustomerRequest request, Authentication auth) {
     final var customer = customersService.createCustomer(request, Integer.parseInt(auth.getName()));
     return ResponseEntity.status(HttpStatus.CREATED).body(customer);
   }
   
   @GetMapping("/{id}")
+  public ResponseEntity getCustomer(@PathVariable Integer id) {
+    final var customer = customersService.getCustomer(id);
+    if(customer != null){
+      return ResponseEntity.ok(customer);
+    }
+    return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+  }
+  
+  @GetMapping("/{id}/image")
   @ResponseBody
-  public ResponseEntity getCustomerImage(@PathVariable Integer id) throws IOException {
+  public ResponseEntity getCustomerImage(@PathVariable Integer id) {
     final var b64raw = customersService.getImageFromCustomer(id);
     if(b64raw != null){
       final var mimeType = getMimeType(b64raw);
-      final var b64Split = b64raw.split(",");
-      final var b64 = (b64Split.length > 1 ? b64Split[1] : b64Split[0]).replaceAll(" ","");
-      final var bytes = Base64.getDecoder().decode(b64);
+      final var bytes = proccessBase64Chain(b64raw);
       return ResponseEntity.ok()
               .contentLength(bytes.length)
               .contentType(mimeType != null ? MediaType.parseMediaType(mimeType) : MediaType.IMAGE_JPEG)
-              .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"image."+mimeType.split("/")[1]+"\"")
+              .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"image."+(mimeType != null ? mimeType.split("/")[1] : "jpeg")+"\"")
               .body(new ByteArrayResource(bytes));
     }
     return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+  }
+  @PutMapping("/{id}")
+  public ResponseEntity updateCustomer(@PathVariable Integer id, @RequestBody UpdateCustomerRequest request, Authentication auth) {
+    final var customer = customersService.updateCustomer(id, Integer.parseInt(auth.getName()), request);
+    if(customer != null){
+      return ResponseEntity.ok(customer);
+    }
+    return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+  }
+  @DeleteMapping("/{id}")
+  public ResponseEntity deleteCustomer(@PathVariable Integer id, Authentication auth) {
+    customersService.deleteCustomer(id, Integer.parseInt(auth.getName()));
+    return ResponseEntity.ok().build();
+  }
+  @PutMapping("/{id}/recover")
+  public ResponseEntity recoverCustomer(@PathVariable Integer id, Authentication auth) {
+    customersService.recoverCustomer(id, Integer.parseInt(auth.getName()));
+    return ResponseEntity.ok().build();
+  }
+  private byte[] proccessBase64Chain(String b64raw) {
+    final var b64Split = b64raw.split(",");
+    final var b64 = (b64Split.length > 1 ? b64Split[1] : b64Split[0]).replaceAll(" ","");
+    final var bytes = Base64.getDecoder().decode(b64);
+    return bytes;
   }
   
   private String getMimeType(String b64) {
@@ -61,16 +92,4 @@ public class CustomersController extends ErrorHandler {
     }
     return null;
   }
-
-//
-//  @GetMapping("/{id}")
-//  public ResponseEntity getCustomer(@PathVariable Integer id, Authentication auth) {
-//    return "test3";
-//  }
-//
-//  @PutMapping("/{id}")
-//  public ResponseEntity updateCustomer(@PathVariable Integer id, Authentication auth) { return "test4"; }
-//
-//  @DeleteMapping("/{id}")
-//  public ResponseEntity deleteCustomer(@PathVariable Integer id, Authentication auth) { return "test5"; }
 }

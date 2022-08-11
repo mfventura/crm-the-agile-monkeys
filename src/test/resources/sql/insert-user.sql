@@ -1,0 +1,1 @@
+INSERT INTO users (id, email, role) VALUES (1, 'random@mail.es', 'ADMIN')

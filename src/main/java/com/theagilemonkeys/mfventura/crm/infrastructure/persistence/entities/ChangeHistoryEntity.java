@@ -26,15 +26,10 @@ public class ChangeHistoryEntity {
     private Integer customerId;
     @Column(name = "user_id")
     private Integer userId;
+    @Column(name = "date")
+    private LocalDateTime date;
   }
   @EmbeddedId
   private Id id;
   private String description;
-  private LocalDateTime date;
-  @ManyToOne
-  @JoinColumn(name = "user_id",referencedColumnName = "id", insertable = false, updatable = false)
-  private UserEntity user;
-  @ManyToOne
-  @JoinColumn(name = "customer_id",referencedColumnName = "id", insertable = false, updatable = false)
-  private CustomerEntity customer;
 }

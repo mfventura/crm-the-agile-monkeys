@@ -28,13 +28,19 @@ public class UsersController extends ErrorHandler {
   @GetMapping("/{id}")
   public ResponseEntity getUser(@PathVariable Integer id){
     final var user = usersService.getUser(id);
-    return ResponseEntity.ok(user);
+    if(user != null) {
+      return ResponseEntity.ok(user);
+    }
+    return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
   }
   
   @PutMapping("/{id}")
   public ResponseEntity updateUser(@PathVariable Integer id, UpdateUserRequest request) {
     final var user = usersService.updateUser(id, request);
-    return ResponseEntity.ok(user);
+    if(user != null) {
+      return ResponseEntity.ok(user);
+    }
+    return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
   }
   
   @DeleteMapping("/{id}")
