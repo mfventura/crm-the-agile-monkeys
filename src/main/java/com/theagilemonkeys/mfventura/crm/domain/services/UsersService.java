@@ -48,27 +48,32 @@ public class UsersService {
     }
     return null;
   }
-  public void deleteUser(Integer id){
+  public UserResponse deleteUser(Integer id){
     var u = userRepository.findById(id);
     if(u.isPresent()){
       var userEntity = u.get();
       userEntity.setRemoveDate(LocalDateTime.now());
       userRepository.save(userEntity);
+      return mapUserResponse(userEntity);
     }
+    return null;
   }
-  public void recoverUser(Integer id){
+  public UserResponse recoverUser(Integer id){
     var u = userRepository.findById(id);
     if(u.isPresent()){
       var userEntity = u.get();
       userEntity.setRemoveDate(null);
       userRepository.save(userEntity);
+      return mapUserResponse(userEntity);
     }
+    return null;
   }
   private UserResponse mapUserResponse(UserEntity u) {
     return UserResponse.builder()
             .id(u.getId())
             .email(u.getEmail())
             .isAdmin(isAdmin(u.getRole()))
+            .isRemoved(u.getRemoveDate()!=null)
             .build();
   }
   private boolean isAdmin(String role) {

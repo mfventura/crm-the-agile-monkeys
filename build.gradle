@@ -65,7 +65,10 @@ jacocoTestReport {
 	afterEvaluate {
 		classDirectories.setFrom(files(classDirectories.files.collect {
 			fileTree(dir: it, exclude: [
-					"com/theagilemonkeys/mfventura/crm/configuration/**"
+					"com/theagilemonkeys/mfventura/crm/configuration/*",
+					"com/theagilemonkeys/mfventura/crm/infrastructure/controller/requests/*",
+					"com/theagilemonkeys/mfventura/crm/infrastructure/controller/responses/*",
+					"com/theagilemonkeys/mfventura/crm/infrastructure/persistence/entities/*"
 			])
 		}))
 	}

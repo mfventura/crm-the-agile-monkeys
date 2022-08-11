@@ -45,13 +45,19 @@ public class UsersController extends ErrorHandler {
   
   @DeleteMapping("/{id}")
   public ResponseEntity deleteUser(@PathVariable Integer id) {
-    usersService.deleteUser(id);
-    return ResponseEntity.ok().build();
+    final var user = usersService.deleteUser(id);
+    if(user != null) {
+      return ResponseEntity.ok(user);
+    }
+    return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
   }
   
   @PutMapping("/{id}/recover")
   public ResponseEntity recoverUser(@PathVariable Integer id) {
-    usersService.recoverUser(id);
-    return ResponseEntity.ok().build();
+    final var user = usersService.recoverUser(id);
+    if(user != null) {
+      return ResponseEntity.ok(user);
+    }
+    return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
   }
 }

@@ -45,6 +45,7 @@ public class CustomersService {
   
     var changeHistoryEntity = createChangeHistory(entity.getId(), userId, "created");
     changeHistoryRepository.save(changeHistoryEntity);
+    entity.getHistory().add(changeHistoryEntity);
     return mapCustomerResponse(entity);
   }
   public CustomerResponse getCustomer(Integer id){
@@ -76,6 +77,7 @@ public class CustomersService {
       customerRepository.save(customer);
       var changeHistoryEntity = createChangeHistory(customer.getId(), userId, "updated");
       changeHistoryRepository.save(changeHistoryEntity);
+      customer.getHistory().add(changeHistoryEntity);
       return mapCustomerResponse(customer);
     }
     return null;
@@ -112,7 +114,7 @@ public class CustomersService {
             .description(h.getDescription())
             .build();
   }
-  public void deleteCustomer(Integer id, int userId) {
+  public CustomerResponse deleteCustomer(Integer id, int userId) {
     var entity = customerRepository.findById(id);
     if(entity.isPresent()){
       var c = entity.get();
@@ -120,9 +122,12 @@ public class CustomersService {
       customerRepository.save(c);
       var changeHistoryEntity = createChangeHistory(c.getId(), userId, "deletion");
       changeHistoryRepository.save(changeHistoryEntity);
+      c.getHistory().add(changeHistoryEntity);
+      return mapCustomerResponse(c);
     }
+    return null;
   }
-  public void recoverCustomer(Integer id, int userId) {
+  public CustomerResponse recoverCustomer(Integer id, int userId) {
     var entity = customerRepository.findById(id);
     if(entity.isPresent()){
       var c = entity.get();
@@ -130,6 +135,9 @@ public class CustomersService {
       customerRepository.save(c);
       var changeHistoryEntity = createChangeHistory(c.getId(), userId, "restore");
       changeHistoryRepository.save(changeHistoryEntity);
+      c.getHistory().add(changeHistoryEntity);
+      return mapCustomerResponse(c);
     }
+    return null;
   }
 }

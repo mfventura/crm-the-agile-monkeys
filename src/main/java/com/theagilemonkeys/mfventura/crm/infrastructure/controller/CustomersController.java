@@ -69,13 +69,19 @@ public class CustomersController extends ErrorHandler {
   }
   @DeleteMapping("/{id}")
   public ResponseEntity deleteCustomer(@PathVariable Integer id, Authentication auth) {
-    customersService.deleteCustomer(id, Integer.parseInt(auth.getName()));
-    return ResponseEntity.ok().build();
+    final var customer = customersService.deleteCustomer(id, Integer.parseInt(auth.getName()));
+    if(customer != null){
+      return ResponseEntity.ok(customer);
+    }
+    return ResponseEntity.notFound().build();
   }
   @PutMapping("/{id}/recover")
   public ResponseEntity recoverCustomer(@PathVariable Integer id, Authentication auth) {
-    customersService.recoverCustomer(id, Integer.parseInt(auth.getName()));
-    return ResponseEntity.ok().build();
+    final var customer = customersService.recoverCustomer(id, Integer.parseInt(auth.getName()));
+    if(customer != null){
+      return ResponseEntity.ok(customer);
+    }
+    return ResponseEntity.notFound().build();
   }
   private byte[] proccessBase64Chain(String b64raw) {
     final var b64Split = b64raw.split(",");

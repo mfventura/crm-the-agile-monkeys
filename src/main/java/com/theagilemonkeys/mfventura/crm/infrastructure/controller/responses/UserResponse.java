@@ -11,4 +11,5 @@ public class UserResponse {
   private Integer id;
   private String email;
   private boolean isAdmin;
+  private boolean isRemoved;
 }
