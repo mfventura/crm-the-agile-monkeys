@@ -57,7 +57,7 @@ public class CustomersController extends ErrorHandler {
     return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
   }
   @PutMapping("/{id}")
-  public ResponseEntity updateCustomer(@PathVariable Integer id, @RequestBody UpdateCustomerRequest request, Authentication auth) {
+  public ResponseEntity updateCustomer(@PathVariable Integer id, @RequestBody @Valid UpdateCustomerRequest request, Authentication auth) {
     final var customer = customersService.updateCustomer(id, Integer.parseInt(auth.getName()), request);
     if(customer != null){
       return ResponseEntity.ok(customer);
