@@ -26,8 +26,8 @@ public class CustomerEntity {
   private String country;
   @Column(unique = true)
   private String document;
-  @Column(length = 1000000000)
-  private String image64;
+  @Column(name = "image", columnDefinition="BLOB")
+  private byte[] image;
   @Column(name = "remove_date")
   private LocalDateTime removeDate;
   @OneToMany

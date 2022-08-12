@@ -4,7 +4,6 @@ import com.theagilemonkeys.mfventura.crm.infrastructure.controller.requests.Crea
 import com.theagilemonkeys.mfventura.crm.infrastructure.controller.requests.UpdateCustomerRequest;
 import com.theagilemonkeys.mfventura.crm.infrastructure.controller.responses.ChangeHistoryResponse;
 import com.theagilemonkeys.mfventura.crm.infrastructure.controller.responses.CustomerResponse;
-import com.theagilemonkeys.mfventura.crm.infrastructure.controller.responses.UserResponse;
 import com.theagilemonkeys.mfventura.crm.infrastructure.persistence.entities.ChangeHistoryEntity;
 import com.theagilemonkeys.mfventura.crm.infrastructure.persistence.entities.CustomerEntity;
 import com.theagilemonkeys.mfventura.crm.infrastructure.persistence.repositories.ChangeHistoryRepository;
@@ -35,7 +34,7 @@ public class CustomersService {
     var entity = CustomerEntity.builder()
             .country(customer.getCountry())
             .document(customer.getDocument())
-            .image64(customer.getImage64()) //TODO default
+            .image(customer.getImage64().getBytes())
             .name(customer.getName())
             .surname(customer.getSurname())
             .surname2(customer.getSurname2())
@@ -58,7 +57,7 @@ public class CustomersService {
   public String getImageFromCustomer(Integer id){
     final var entity = customerRepository.findById(id);
     if(entity.isPresent()){
-      return entity.get().getImage64();
+      return entity.get().getImage() != null ? new String(entity.get().getImage()) : null;
     }
     return null;
   }
@@ -72,7 +71,7 @@ public class CustomersService {
       customer.setSurname(request.getSurname());
       customer.setSurname2(request.getSurname2());
       if(!"XXX".equals(request.getImage64())){
-        customer.setImage64(request.getImage64());
+        customer.setImage(request.getImage64().getBytes());
       }
       customerRepository.save(customer);
       var changeHistoryEntity = createChangeHistory(customer.getId(), userId, "updated");

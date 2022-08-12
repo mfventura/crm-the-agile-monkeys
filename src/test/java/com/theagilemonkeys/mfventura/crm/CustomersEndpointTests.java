@@ -95,7 +95,30 @@ class CustomersEndpointTests {
   @Test
   @Sql("/sql/insert-user.sql")
   @Sql("/sql/insert-customer.sql")
-  public void getCustomerImageOk(){
+  public void getCustomerImageOk() throws IOException {
+    File imageFile = new File("src/test/resources/static/default-customer.jpeg");
+    final var b64 = Base64.getEncoder().encodeToString(new FileInputStream(imageFile).readAllBytes());
+    final var customer = UpdateCustomerRequest.builder()
+            .country("UK")
+            .document("12345678Z")
+            .name("Name")
+            .surname("Surname")
+            .surname2("Surname2")
+            .image64(b64)
+            .build();
+    final var auth = new AbstractAuthenticationToken(null) {
+      @Override
+      public Object getCredentials() {
+        return "";
+      }
+    
+      @Override
+      public Object getPrincipal() {
+        return "1";
+      }
+    };
+  
+    customersController.updateCustomer(1, customer, auth);
     final var response = customersController.getCustomerImage(1);
     assertEquals(response.getHeaders().getContentType(), MediaType.IMAGE_JPEG);
   }
