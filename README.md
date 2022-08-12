@@ -37,6 +37,8 @@ This command execute the tests
 
 We are not going in deep on docker functionalities. Check the official documentation if you have any doubt.
 
+After running the containers, connect to the database and insert your first user. This is needed to interact with the API. There you have an [insert example](documents/data.sql)
+
 ### Documentation
 
 The API of the project its explained on [this document](documents/api-doc.yaml).
