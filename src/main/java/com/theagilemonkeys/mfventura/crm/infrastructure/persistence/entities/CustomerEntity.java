@@ -24,6 +24,7 @@ public class CustomerEntity {
   @Column(name = "surname_2")
   private String surname2;
   private String country;
+  @Column(unique = true)
   private String document;
   @Column(length = 1000000000)
   private String image64;

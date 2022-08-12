@@ -40,8 +40,9 @@ public class OAuth2UserServiceImpl implements OAuth2UserService {
       attributes.put("id", userEntity.get().getId());
       attributes.put("email", email);
       authorities.add(new SimpleGrantedAuthority("ROLE_"+userEntity.get().getRole()));
+      return new DefaultOAuth2User(authorities, attributes, userRequest.getClientRegistration().getProviderDetails().getUserInfoEndpoint().getUserNameAttributeName());
     }
-    return new DefaultOAuth2User(authorities, attributes, userRequest.getClientRegistration().getProviderDetails().getUserInfoEndpoint().getUserNameAttributeName());
+    return new DefaultOAuth2User(authorities, user.getAttributes(), userRequest.getClientRegistration().getProviderDetails().getUserInfoEndpoint().getUserNameAttributeName());
   
   }
 }

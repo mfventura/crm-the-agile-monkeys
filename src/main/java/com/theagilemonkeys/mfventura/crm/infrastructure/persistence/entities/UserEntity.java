@@ -18,6 +18,7 @@ public class UserEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Integer id;
+  @Column(unique = true)
   private String email;
   private String role;
   @Column(name = "remove_date")
