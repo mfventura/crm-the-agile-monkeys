@@ -33,7 +33,7 @@ dependencies {
 	implementation 'org.hibernate:hibernate-validator:6.0.10.Final'
 
 	//Runtime dataase, add other dependencies for other DB
-	runtimeOnly 'com.h2database:h2'
+	runtimeOnly 'org.postgresql:postgresql'
 
 	//Test database
 	testImplementation 'com.h2database:h2'
