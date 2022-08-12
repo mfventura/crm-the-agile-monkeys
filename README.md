@@ -24,6 +24,8 @@ server.port
 We are assuming that you have installed docker and docker compose on your server machine.
 There are 3 instructions to run the project.
 
+Situate on the folder that is holding the project and use these commands.
+
 This command stops the current task if one is running.
 > docker-compose down
 
@@ -34,6 +36,11 @@ This command execute the tests
 >docker-compose run --rm --no-deps -p "8080:8080" java-api gradle test
 
 We are not going in deep on docker functionalities. Check the official documentation if you have any doubt.
+
+### Documentation
+
+The API of the project its explained on [this document](documents/api-doc.yaml).
+This can be read with [swagger editor](https://editor.swagger.io/). Copy the yaml content and paste on the editor. You will see a human-readable documentation.
 
 ### Dependencies
 
