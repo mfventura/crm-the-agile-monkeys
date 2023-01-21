@@ -21,7 +21,7 @@ public class CustomersController extends ErrorHandler {
   @Autowired
   private CustomersService customersService;
   @GetMapping()
-  public ResponseEntity listCustomers(){
+  public ResponseEntity listCustomers(@RequestParam boolean showAll){
     final var customers = customersService.listCustomers();
     return ResponseEntity.ok(customers);
   }

@@ -43,6 +43,7 @@ After running the containers, connect to the database and insert your first user
 
 The API of the project its explained on [this document](documents/api-doc.yaml).
 This can be read with [swagger editor](https://editor.swagger.io/). Copy the yaml content and paste on the editor. You will see a human-readable documentation.
+//TODO ver el tema login para testing desde POSTMAN
 
 ### Dependencies
 

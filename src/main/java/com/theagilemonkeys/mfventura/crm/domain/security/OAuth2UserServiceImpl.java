@@ -34,11 +34,13 @@ public class OAuth2UserServiceImpl implements OAuth2UserService {
     OAuth2User user = userService.loadUser(userRequest);
     Set<GrantedAuthority> authorities = new LinkedHashSet<>();
     final String email = (String) user.getAttributes().get("email");
+    final String token = (String) user.getAttributes().get("tokenValue");
     final var userEntity = userRepository.findByEmailAndRemoveDateIsNull(email);
     Map<String, Object> attributes = new HashMap<>();
     if(userEntity.isPresent()){
       attributes.put("id", userEntity.get().getId());
       attributes.put("email", email);
+      attributes.put("token", token);
       authorities.add(new SimpleGrantedAuthority("ROLE_"+userEntity.get().getRole()));
       return new DefaultOAuth2User(authorities, attributes, userRequest.getClientRegistration().getProviderDetails().getUserInfoEndpoint().getUserNameAttributeName());
     }

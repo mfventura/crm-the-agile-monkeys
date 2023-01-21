@@ -7,7 +7,7 @@ services:
         depends_on:
             -   postgres-db
         volumes:
-            -   "${PWD}:/home/gradle/project"
+            -   "/C/Users/manu6/IdeaProjects/crm:/home/gradle/project"
             -   "gradle-cache:/home/gradle/.gradle"
         working_dir: "/home/gradle/project"
         ports:

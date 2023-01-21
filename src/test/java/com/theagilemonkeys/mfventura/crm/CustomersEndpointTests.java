@@ -55,7 +55,7 @@ class CustomersEndpointTests {
   @Sql("/sql/insert-user.sql")
   @Sql("/sql/insert-customer.sql")
   public void listCustomers(){
-    final var response = customersController.listCustomers();
+    final var response = customersController.listCustomers(true);
     final var body = (List<CustomerResponse>)response.getBody();
     assertEquals(response.getStatusCode().value(), (HttpStatus.OK.value()));
     assertEquals(body.size(), 1);

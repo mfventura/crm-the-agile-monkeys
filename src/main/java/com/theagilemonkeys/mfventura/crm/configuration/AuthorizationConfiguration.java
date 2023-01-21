@@ -26,7 +26,7 @@ public class AuthorizationConfiguration {
                 .anyRequest().authenticated()
             )
             .sessionManagement(session -> session
-                    .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
+                    .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             )
             .headers().frameOptions().disable().and()
             .csrf().disable()
